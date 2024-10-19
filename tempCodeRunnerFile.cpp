@@ -1,1 +1,1 @@
-  print(head2);
+temp.length()-1

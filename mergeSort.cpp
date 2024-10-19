@@ -1,127 +1,66 @@
 #include<iostream>
 using namespace std;
-class Node{
-    public:
-    int data;
-    Node* next;
-    Node(int data){
-        this->data=data;
-        this->next=NULL;
+void merge(int *arr,int s,int e){
+    int mid=s+(e-s)/2;
+    int l1=mid-s+1;
+    int l2=e-mid;
+    int *arr1=new int[l1];
+    int *arr2=new int[l2];
+    cout<<s<<" "<<e<<" "<<mid<<" "<<l1<<" "<<l2<<endl;
+    int k=s;
+    for (int i = 0; i < l1; i++)
+    {
+       arr1[i]=arr[k++];
     }
-};
-void print(Node* head){
-        Node* temp = head;
-        while (temp!=NULL)
+     k=mid+1;
+    for (int i = 0; i < l2; i++)
+    {
+       arr2[i]=arr[k++];
+    }
+    int index1=0;
+    int index2=0;
+     k=s;
+
+    while (index1<l1&&index2<l2)
+    {
+        if (arr1[index1]<arr2[index2])
         {
-            cout<<temp->data<<" ";
-            temp=temp->next;
-        }
-        cout<<endl;
-    }
- void insertAtHead(Node* &head,Node* &tail,int d){
-        Node* temp = new Node(d);
-        if(head==NULL){
-            head=temp;
-            tail=head;
+            arr[k++]=arr1[index1++];
         }
         else{
-        temp->next=head;
-        head=temp;
+            arr[k++]=arr2[index2++];
         }
- }
-    void insertAtTAil(Node* &head,Node* &tail,int data){
-    Node* temp=new Node(data);
-    if(tail==NULL){
-        head=temp;
-        tail=head;
+        
     }
-    else{
-        tail->next=temp;
-        tail=temp;
-           
-        }
-}
-
-Node* merge(Node* left,Node* right){
-    cout<<"left-> "<<left->data<<" "<<"right-> "<<right->data<<endl;
-       if(right==NULL){
-          return left;
-        }
-         else if(left==NULL){
-            return right;
-        }
-  Node* ans=new Node(-1);
-  Node* temp=ans;
-  while(left!=NULL&&right!=NULL){
-  if(left->data<right->data){
-    temp->next=left;
-    temp=left;
-    left=left->next;
+    while (index1<l1){
+        arr[k++]=arr1[index1++];
+    }
+    while (index2<l2){
+        arr[k++]=arr2[index2++];
+    }
+delete []arr1;
+delete[]arr2;
     
-  }
-  else{
-    temp->next=right;
-    temp=right;
-    right=right->next;
-  }
-  }
-  while(left!=NULL){
-    temp->next=left;
-    temp=left;
-    left=left->next;
-  }
-  while (right!=NULL)
-  {
-    temp->next=right;
-    temp=right;
-    right=right->next;
-  }
-  ans=ans->next;
-  print(ans);
-  return ans;
-  
 }
-
-
-Node* middle(Node* head){
-        Node* slow=head;
-        Node* fast=head->next;
-        while(fast!=NULL&&fast->next!=NULL){
-            fast=fast->next->next;
-            slow=slow->next;
-        }
-        return slow;
+void mergeSort(int arr[],int s,int e){
+    if(s>=e){
+        return;
     }
-
-
-
-Node* mergeSort(Node* head){
-    if(head==NULL||head->next==NULL){
-      return head;
-    }
-    Node* mid=middle(head);
-    Node* left=head;
-    Node* right=mid->next;
-    mid->next=NULL;
-    cout<<"mid-> "<<mid->data<<endl;
-    left=mergeSort(left);
-    right=mergeSort(right);
-    Node* result=merge(left,right);
-    return result;
+    int mid =s+(e-s)/2;
+    mergeSort(arr,s,mid);
+    mergeSort(arr,mid+1,e);
+    merge(arr,s,e);
 }
-
-    int main(){
-    Node* head1=NULL;
-    Node* tail1=NULL;
-    insertAtTAil(head1,tail1,15);
-    insertAtHead(head1,tail1,1);
-    insertAtTAil(head1,tail1,9);
-    insertAtTAil(head1,tail1,5);
-    insertAtHead(head1,tail1,2);
-    insertAtHead(head1,tail1,0);
-    insertAtHead(head1,tail1,12);  
-    print(head1);
-    Node* head2=mergeSort(head1);
-    print (head2);
+int main(){
+    int arr[7]={5,3,2,4,6,7,1};
+    int n= 7;
+    mergeSort(arr,0,n-1);
+    cout<<endl;
+    for (int  i = 0; i < n; i++)
+    {
+       cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+    
     return 0;
 }
